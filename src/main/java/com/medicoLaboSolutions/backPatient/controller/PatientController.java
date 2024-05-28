@@ -14,9 +14,9 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping("/patient")
-    public String getPatient(Model model, @RequestParam String surname){
-        Patient requestedPatient = patientService.findPatientBySurname(surname)
-                .orElseThrow(() -> new IllegalArgumentException("No registered patient has this :" + surname));
+    public String getPatient(Model model, @RequestParam String lastname){
+        Patient requestedPatient = patientService.findPatientByLastname(lastname)
+                .orElseThrow(() -> new IllegalArgumentException("No registered patient has this :" + lastname));
         model.addAttribute("patient", requestedPatient);
         return "patient";
     }
