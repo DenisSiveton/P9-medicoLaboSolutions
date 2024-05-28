@@ -23,7 +23,6 @@ public class PatientController {
     @GetMapping("/patients")
     public String getPatients(Model model){
         Iterable<Patient> requestedPatientList = patientService.findAll();
-                //.orElseThrow(() -> new IllegalArgumentException("No patient has been registered yet :"));
         model.addAttribute("patients", requestedPatientList);
         return "patient/list";
     }
