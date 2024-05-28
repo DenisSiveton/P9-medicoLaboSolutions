@@ -1,9 +1,11 @@
 package com.medicoLaboSolutions.backPatient.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Date;
 
+@Data
 @Entity
 @Table(name= "patient")
 public class Patient {
@@ -45,29 +47,5 @@ public class Patient {
         this.gender = gender;
         this.address = address;
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public Date getBirthDate() {
-        return birthDate;
-    }
-
-    public char getGender() {
-        return gender;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
     }
 }
