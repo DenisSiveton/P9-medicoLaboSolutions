@@ -15,11 +15,11 @@ public class Patient {
     @Column(name = "patient_id")
     private int patientId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "firstname")
+    private String firstname;
 
-    @Column(name = "surname")
-    private String surname;
+    @Column(name = "lastname")
+    private String lastname;
 
     @Column(name = "birth_date")
     private Date birthDate;
@@ -33,16 +33,16 @@ public class Patient {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    public Patient(String name, String surname, Date birthDate, char gender) {
-        this.name = name;
-        this.surname = surname;
+    public Patient(String firstname, String lastname, Date birthDate, char gender) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.birthDate = birthDate;
         this.gender = gender;
     }
 
-    public Patient(String name, String surname, Date birthDate, char gender, String address, String phoneNumber) {
-        this.name = name;
-        this.surname = surname;
+    public Patient(String firstname, String lastname, Date birthDate, char gender, String address, String phoneNumber) {
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.birthDate = birthDate;
         this.gender = gender;
         this.address = address;

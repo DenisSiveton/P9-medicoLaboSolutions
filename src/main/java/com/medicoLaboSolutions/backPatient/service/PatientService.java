@@ -14,8 +14,8 @@ public class PatientService {
     private PatientRepository patientRepository;
 
 
-    public Optional<Patient> findPatientBySurname(String surname) {
-        return patientRepository.findBySurname(surname);
+    public Optional<Patient> findPatientByLastname(String surname) {
+        return patientRepository.findByLastname(surname);
     }
 
     public Iterable<Patient> findAll() {
