@@ -56,6 +56,10 @@ public class SpringSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //Set up the login form
         httpSecurity.formLogin().defaultSuccessUrl("/patients").permitAll();
+
+        // For test use only
+        httpSecurity.csrf().disable();
+
         //Set up the filter chain for different request (authentication needed or not)
         httpSecurity.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) ->
                 authorizationManagerRequestMatcherRegistry
