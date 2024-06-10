@@ -18,7 +18,7 @@ public class PatientService {
 
     public Patient findPatientByLastname(String surname) {
         return patientRepository.findByLastname(surname)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Patient : No patient exists with the surname " + surname + ". Please repeat your request"));
+                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient : No patient exists with the surname " + surname + ". Please repeat your request"));
     }
 
     public Iterable<Patient> findAll() {
@@ -32,7 +32,7 @@ public class PatientService {
 
     public Patient updatePatient(PatientDTO patientWithUpdatedInfo, Integer id) {
         Patient patientFromDB = patientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
+                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
         patientFromDB.setFirstname(patientWithUpdatedInfo.getFirstname());
         patientFromDB.setLastname(patientWithUpdatedInfo.getLastname());
         patientFromDB.setAddress(patientWithUpdatedInfo.getAddress());
@@ -42,7 +42,7 @@ public class PatientService {
 
     public Patient deleteById(Integer id) {
         Patient patientToDelete = patientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
+                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
         patientRepository.delete(patientToDelete);
         return patientToDelete;
     }
