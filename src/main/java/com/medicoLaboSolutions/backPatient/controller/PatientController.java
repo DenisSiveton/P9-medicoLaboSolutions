@@ -13,24 +13,22 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/patient")
+@RequestMapping(path = "/patients")
 public class PatientController {
 
     private Logger logger = LoggerFactory.getLogger(PatientController.class);
     @Autowired
     private PatientService patientService;
 
-    @GetMapping("/{lastName}")
-    public Patient getPatient(@PathVariable String lastname){
-        logger.info("Retrieve patient info with the surname :" + lastname);
-        Patient requestedPatient = patientService.findPatientByLastname(lastname);
-        return requestedPatient;
+    @GetMapping("/{lastname}")
+    public Patient getPatient(@PathVariable("lastname")  String lastname){
+        logger.info("Retrieve patient info with the surname : {}", lastname);
+        return patientService.findPatientByLastname(lastname);
     }
-    @GetMapping("/")
-    public Iterable<Patient> getPatients(){
+    @GetMapping("")
+    public Iterable<Patient> getAllPatients(){
         logger.info("Retrieve all patients info.");
-        Iterable<Patient> requestedPatientList = patientService.findAll();
-        return requestedPatientList;
+        return patientService.findAll();
     }
 
     /**
@@ -45,8 +43,8 @@ public class PatientController {
      * @return URI /patients. Show table with updated BidLists
      * @return In case of error : URI bidList/add. Returns to the form for a second attempt
      */
-    @PostMapping(path = "/", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public Patient validate(@Valid Patient patient, BindingResult result) {
+    @PostMapping(path = "")
+    public ResponseEntity<Patient> addPatient(@Valid @RequestBody Patient patient, BindingResult result) {
         if (!result.hasErrors()) {
             logger.info("Add new patient.");
             return patientService.addNewPatient(patient);
@@ -54,10 +52,10 @@ public class PatientController {
         return patient;
     }
 
-    @PutMapping(path = "/{id}", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public Patient updatePatient(@PathVariable("id") Integer id, @Valid PatientDTO patientWithUpdatedInfo, BindingResult result){
+    @PutMapping(path = "/{id}")
+    public Patient updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
         if(!result.hasErrors()){
-            logger.info("Update patient with the id :" + id);
+            logger.info("Update patient with the id : {}",id);
             return patientService.updatePatient(patientWithUpdatedInfo, id);
         }
         return null;
@@ -66,7 +64,7 @@ public class PatientController {
     @DeleteMapping("/{id}")
     public Patient deletePatient(@PathVariable("id") Integer id){
         try {
-            logger.info("Delete patient with the id :" + id);
+            logger.info("Delete patient with the id : {}",id);
             return patientService.deleteById(id);
         }catch(IllegalArgumentException illegalArgumentException){
             logger.error(illegalArgumentException.getMessage());
