@@ -1,4 +1,4 @@
-package com.medicoLaboSolutions.backPatient.security.config;
+package com.medicoLaboSolutions.backPatient.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
