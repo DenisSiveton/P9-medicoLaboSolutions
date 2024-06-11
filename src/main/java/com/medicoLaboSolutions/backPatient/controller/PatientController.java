@@ -8,9 +8,12 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @RestController
 @RequestMapping(path = "/patients")
@@ -47,9 +50,17 @@ public class PatientController {
     public ResponseEntity<Patient> addPatient(@Valid @RequestBody Patient patient, BindingResult result) {
         if (!result.hasErrors()) {
             logger.info("Add new patient.");
-            return patientService.addNewPatient(patient);
+            Patient patientAdded = patientService.addNewPatient(patient);
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{lastname}")
+                    .buildAndExpand(patientAdded.getLastname())
+                    .toUri();
+            
+            return ResponseEntity.created(location).body(patientAdded);
         }
-        return patient;
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping(path = "/{id}")
