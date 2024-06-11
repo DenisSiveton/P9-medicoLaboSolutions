@@ -12,6 +12,8 @@ address varchar(200),
 phone_number varchar(12),
 PRIMARY KEY (patient_id)) ENGINE=InnoDB;
 
+create unique index ix_firstname_lastname on patient (firstname,lastname);
+
 create table if not exists users(
 username varchar(50) not null primary key,
 password varchar(500) not null,
