@@ -1,6 +1,6 @@
 package com.medicoLaboSolutions.backPatient.controller;
 
-import com.medicoLaboSolutions.backPatient.model.Patient;
+import com.medicoLaboSolutions.backPatient.exceptions.PatientNotFoundException;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
 import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.service.PatientService;
@@ -77,8 +77,8 @@ public class PatientController {
         try {
             logger.info("Delete patient with the id : {}",id);
             return patientService.deleteById(id);
-        }catch(IllegalArgumentException illegalArgumentException){
-            logger.error(illegalArgumentException.getMessage());
+        }catch(PatientNotFoundException patientNotFoundException){
+            logger.error(patientNotFoundException.getMessage());
             return null;
         }
     }
