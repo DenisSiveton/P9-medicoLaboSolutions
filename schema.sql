@@ -7,7 +7,7 @@ patient_id int NOT NULL AUTO_INCREMENT,
 firstname varchar(30),
 lastname varchar(50),
 birth_date date,
-gender char,
+gender varchar(1),
 address varchar(200),
 phone_number varchar(12),
 PRIMARY KEY (patient_id)) ENGINE=InnoDB;
