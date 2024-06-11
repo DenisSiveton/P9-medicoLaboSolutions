@@ -2,6 +2,7 @@ package com.medicoLaboSolutions.backPatient.controller;
 
 import com.medicoLaboSolutions.backPatient.model.Patient;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
+import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.service.PatientService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;

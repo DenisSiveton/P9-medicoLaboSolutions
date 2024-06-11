@@ -1,6 +1,6 @@
 package com.medicoLaboSolutions.backPatient.repository;
 
-import com.medicoLaboSolutions.backPatient.model.Patient;
+import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
