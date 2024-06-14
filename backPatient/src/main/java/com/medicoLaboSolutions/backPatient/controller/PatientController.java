@@ -48,9 +48,10 @@ public class PatientController {
      */
     @PostMapping(path = "")
     public ResponseEntity<Patient> addPatient(@Valid @RequestBody Patient patient, BindingResult result) {
+        logger.info("Request : Add a new Patient");
         if (!result.hasErrors()) {
-            logger.info("Add new patient.");
             Patient patientAdded = patientService.addNewPatient(patient);
+            logger.info("{} {} wad added as a new patient.", patientAdded.getFirstname(), patientAdded.getLastname());
 
             URI location = ServletUriComponentsBuilder
                     .fromCurrentRequest()
@@ -65,21 +66,20 @@ public class PatientController {
 
     @PutMapping(path = "/{id}")
     public Patient updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
+        logger.info("Request : Update patient with the id : {}",id);
         if(!result.hasErrors()){
-            logger.info("Update patient with the id : {}",id);
-            return patientService.updatePatient(patientWithUpdatedInfo, id);
+            Patient patientUpdated =  patientService.updatePatient(patientWithUpdatedInfo, id);
+            logger.info("Patient with the id : {} was updated",id);
+            return patientUpdated;
         }
         return null;
     }
 
     @DeleteMapping("/{id}")
     public Patient deletePatient(@PathVariable("id") Integer id){
-        try {
-            logger.info("Delete patient with the id : {}",id);
-            return patientService.deleteById(id);
-        }catch(PatientNotFoundException patientNotFoundException){
-            logger.error(patientNotFoundException.getMessage());
-            return null;
-        }
+        logger.info("Request : Delete patient with the id : {}",id);
+        Patient patientDeleted = patientService.deleteById(id);
+        logger.info("Patient with the id : {} was deleted",id);
+        return patientDeleted;
     }
 }
