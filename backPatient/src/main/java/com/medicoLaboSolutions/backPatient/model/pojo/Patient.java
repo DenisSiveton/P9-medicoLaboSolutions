@@ -1,5 +1,7 @@
 package com.medicoLaboSolutions.backPatient.model.pojo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
@@ -34,6 +36,7 @@ public class Patient {
 
     @Column(name = "birth_date")
     @DateTimeFormat(pattern = "YYYY-MM-dd")
+    @JsonFormat(lenient= OptBoolean.FALSE)
     private Date birthDate;
 
     @Column(name = "gender")

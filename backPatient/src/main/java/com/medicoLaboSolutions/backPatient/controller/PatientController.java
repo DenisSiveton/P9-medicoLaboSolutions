@@ -57,10 +57,10 @@ public class PatientController {
                     .path("/{lastname}")
                     .buildAndExpand(patientAdded.getLastname())
                     .toUri();
-            
+
             return ResponseEntity.created(location).body(patientAdded);
         }
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.badRequest().build();
     }
 
     @PutMapping(path = "/{id}")
