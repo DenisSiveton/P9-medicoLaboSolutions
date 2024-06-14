@@ -4,6 +4,7 @@ import com.medicoLaboSolutions.backPatient.exceptions.PatientNotFoundException;
 import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
 import com.medicoLaboSolutions.backPatient.repository.PatientRepository;
+import com.medicoLaboSolutions.backPatient.service.mapper.PatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,9 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
+
+    @Autowired
+    private PatientMapper patientMapper;
 
 
     public Patient findPatientByLastname(String surname) {
@@ -31,10 +35,7 @@ public class PatientService {
     public Patient updatePatient(PatientDTO patientWithUpdatedInfo, Integer id) {
         Patient patientFromDB = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
-        patientFromDB.setFirstname(patientWithUpdatedInfo.getFirstname());
-        patientFromDB.setLastname(patientWithUpdatedInfo.getLastname());
-        patientFromDB.setAddress(patientWithUpdatedInfo.getAddress());
-        patientFromDB.setPhoneNumber(patientWithUpdatedInfo.getPhoneNumber());
+        patientMapper.update(patientFromDB, patientWithUpdatedInfo);
         return patientRepository.save(patientFromDB);
     }
 
