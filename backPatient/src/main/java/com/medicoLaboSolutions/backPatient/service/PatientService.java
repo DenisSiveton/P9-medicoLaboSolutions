@@ -1,6 +1,6 @@
 package com.medicoLaboSolutions.backPatient.service;
 
-import com.medicoLaboSolutions.backPatient.exceptions.PatientNotFoundException;
+import com.medicoLaboSolutions.backPatient.error_handling.exceptions.PatientNotFoundException;
 import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
 import com.medicoLaboSolutions.backPatient.repository.PatientRepository;

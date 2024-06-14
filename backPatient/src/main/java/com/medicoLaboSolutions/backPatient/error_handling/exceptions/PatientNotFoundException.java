@@ -1,4 +1,4 @@
-package com.medicoLaboSolutions.backPatient.exceptions;
+package com.medicoLaboSolutions.backPatient.error_handling.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
