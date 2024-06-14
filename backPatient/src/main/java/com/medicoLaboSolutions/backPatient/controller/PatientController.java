@@ -24,14 +24,16 @@ public class PatientController {
     private PatientService patientService;
 
     @GetMapping("/{lastname}")
-    public Patient getPatient(@PathVariable("lastname")  String lastname){
+    public ResponseEntity<Patient> getPatient(@PathVariable("lastname")  String lastname){
         logger.info("Retrieve patient info with the surname : {}", lastname);
-        return patientService.findPatientByLastname(lastname);
+        Patient patientFound = patientService.findPatientByLastname(lastname);
+        return ResponseEntity.ok(patientFound);
     }
     @GetMapping("")
-    public Iterable<Patient> getAllPatients(){
+    public ResponseEntity<Iterable<Patient>> getAllPatients(){
         logger.info("Retrieve all patients info.");
-        return patientService.findAll();
+        Iterable<Patient> listOfPatient = patientService.findAll();
+        return ResponseEntity.ok(listOfPatient);
     }
 
     /**
@@ -65,21 +67,28 @@ public class PatientController {
     }
 
     @PutMapping(path = "/{id}")
-    public Patient updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
+    public ResponseEntity<Patient> updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
         logger.info("Request : Update patient with the id : {}",id);
         if(!result.hasErrors()){
             Patient patientUpdated =  patientService.updatePatient(patientWithUpdatedInfo, id);
             logger.info("Patient with the id : {} was updated",id);
-            return patientUpdated;
+
+            URI location = ServletUriComponentsBuilder
+                    .fromCurrentRequest()
+                    .path("/{lastname}")
+                    .buildAndExpand(patientUpdated.getLastname())
+                    .toUri();
+
+            return ResponseEntity.created(location).body(patientUpdated);
         }
-        return null;
+        return ResponseEntity.badRequest().build();
     }
 
     @DeleteMapping("/{id}")
-    public Patient deletePatient(@PathVariable("id") Integer id){
+    public ResponseEntity<Patient> deletePatient(@PathVariable("id") Integer id){
         logger.info("Request : Delete patient with the id : {}",id);
         Patient patientDeleted = patientService.deleteById(id);
         logger.info("Patient with the id : {} was deleted",id);
-        return patientDeleted;
+        return ResponseEntity.ok(patientDeleted);
     }
 }
