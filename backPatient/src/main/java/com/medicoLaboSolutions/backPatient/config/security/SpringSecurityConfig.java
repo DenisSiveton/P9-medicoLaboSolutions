@@ -61,9 +61,12 @@ public class SpringSecurityConfig {
         httpSecurity.csrf().disable();
 
         //Set up the filter chain for different request (authentication needed or not)
+        /*httpSecurity.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) ->
+                authorizationManagerRequestMatcherRegistry
+                        .anyRequest().authenticated());*/
         httpSecurity.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) ->
                 authorizationManagerRequestMatcherRegistry
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
         return httpSecurity.build();
     }
 
