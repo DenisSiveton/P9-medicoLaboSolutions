@@ -1,6 +1,6 @@
-package com.mediLaboSolutions.frontClient.proxies;
+package com.medicoLaboSolutions.frontClient.proxies;
 
-import com.mediLaboSolutions.frontClient.beans.PatientBean;
+import com.medicoLaboSolutions.frontClient.beans.PatientBean;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,4 +1,4 @@
-package com.mediLaboSolutions.frontClient;
+package com.medicoLaboSolutions.frontClient;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
