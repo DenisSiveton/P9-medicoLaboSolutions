@@ -4,9 +4,12 @@ import com.medicoLaboSolutions.backPatient.error_handling.exceptions.PatientNotF
 import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
 import com.medicoLaboSolutions.backPatient.repository.PatientRepository;
-import com.medicoLaboSolutions.backPatient.service.mapper.PatientMapper;
+import com.medicoLaboSolutions.backPatient.mapper.PatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 @Service
 public class PatientService {
@@ -23,8 +26,9 @@ public class PatientService {
                 .orElseThrow(() -> new PatientNotFoundException("Invalid Patient : No patient exists with the surname " + surname + ". Please repeat your request"));
     }
 
-    public Iterable<Patient> findAll() {
-        return patientRepository.findAll();
+    public List<Patient> findAll() {
+        List<Patient> patientList = StreamSupport.stream(patientRepository.findAll().spliterator(), false).toList();
+        return patientList;
     }
 
 
@@ -35,7 +39,7 @@ public class PatientService {
     public Patient updatePatient(PatientDTO patientWithUpdatedInfo, Integer id) {
         Patient patientFromDB = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
-        patientMapper.update(patientFromDB, patientWithUpdatedInfo);
+        patientFromDB =  patientMapper.update(patientWithUpdatedInfo);
         return patientRepository.save(patientFromDB);
     }
 

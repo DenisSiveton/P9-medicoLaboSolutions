@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/patients")
@@ -29,9 +30,9 @@ public class PatientController {
         return ResponseEntity.ok(patientFound);
     }
     @GetMapping("")
-    public ResponseEntity<Iterable<Patient>> getAllPatients(){
+    public ResponseEntity<List<Patient>> getAllPatients(){
         logger.info("Retrieve all patients info.");
-        Iterable<Patient> listOfPatient = patientService.findAll();
+        List<Patient> listOfPatient = patientService.findAll();
         return ResponseEntity.ok(listOfPatient);
     }
 
