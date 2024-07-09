@@ -66,6 +66,13 @@ public class PatientController {
         return ResponseEntity.badRequest().build();
     }
 
+    @GetMapping(path ="/dto/{id}")
+    public ResponseEntity<PatientDTO> getPatientDTO(@PathVariable("id") int id){
+        logger.info("Request : Get patientDTO info with the id : {}", id);
+        PatientDTO patientDTOFound = patientService.producePatientDTOFromPatient(id);
+        return ResponseEntity.ok(patientDTOFound);
+    }
+
     @PutMapping(path = "/{id}")
     public ResponseEntity<Patient> updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
         logger.info("Request : Update patient with the id : {}",id);

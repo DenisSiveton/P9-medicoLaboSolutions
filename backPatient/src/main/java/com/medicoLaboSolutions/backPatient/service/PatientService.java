@@ -39,8 +39,15 @@ public class PatientService {
     public Patient updatePatient(PatientDTO patientWithUpdatedInfo, Integer id) {
         Patient patientFromDB = patientRepository.findById(id)
                 .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
-        patientFromDB =  patientMapper.update(patientWithUpdatedInfo);
+        updatePatientData(patientFromDB, patientWithUpdatedInfo);
         return patientRepository.save(patientFromDB);
+    }
+
+    private void updatePatientData(Patient patientFromDB, PatientDTO patientWithUpdatedInfo) {
+        patientFromDB.setFirstname( patientWithUpdatedInfo.getFirstname() );
+        patientFromDB.setLastname( patientWithUpdatedInfo.getLastname() );
+        patientFromDB.setAddress( patientWithUpdatedInfo.getAddress() );
+        patientFromDB.setPhoneNumber( patientWithUpdatedInfo.getPhoneNumber() );
     }
 
     public Patient deleteById(Integer id) {
@@ -48,5 +55,10 @@ public class PatientService {
                 .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
         patientRepository.delete(patientToDelete);
         return patientToDelete;
+    }
+
+    public PatientDTO producePatientDTOFromPatient(int id) {
+        Patient patientFound = findPatientById(id);
+        return new PatientDTO(patientFound.getPatientId(), patientFound.getFirstname(), patientFound.getLastname(), patientFound.getAddress(), patientFound.getPhoneNumber());
     }
 }
