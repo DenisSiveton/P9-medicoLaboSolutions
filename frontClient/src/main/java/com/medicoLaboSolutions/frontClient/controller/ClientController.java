@@ -25,9 +25,9 @@ public class ClientController {
         return "patient/list";
     }
 
-    @RequestMapping(path = "/patients/{lastname}")
-    public String patientInfo(@PathVariable(value = "lastname") String patientLastname, Model model){
-        PatientBean patientsBean =  microservicePatientProxy.getPatient(patientLastname).getBody();
+    @RequestMapping(path = "/patients/{id}")
+    public String patientInfo(@PathVariable(value = "id") int patientId, Model model){
+        PatientBean patientsBean =  microservicePatientProxy.getPatient(patientId).getBody();
         model.addAttribute("patient", patientsBean);
         return "patient/info";
     }

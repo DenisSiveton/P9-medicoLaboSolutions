@@ -23,10 +23,10 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @GetMapping("/{lastname}")
-    public ResponseEntity<Patient> getPatient(@PathVariable("lastname")  String lastname){
-        logger.info("Retrieve patient info with the surname : {}", lastname);
-        Patient patientFound = patientService.findPatientByLastname(lastname);
+    @GetMapping("/{id}")
+    public ResponseEntity<Patient> getPatient(@PathVariable("id")  int id){
+        logger.info("Retrieve patient info with the Id : {}", id);
+        Patient patientFound = patientService.findPatientById(id);
         return ResponseEntity.ok(patientFound);
     }
     @GetMapping("")

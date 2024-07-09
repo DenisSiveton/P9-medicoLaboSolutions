@@ -21,9 +21,9 @@ public class PatientService {
     private PatientMapper patientMapper;
 
 
-    public Patient findPatientByLastname(String surname) {
-        return patientRepository.findByLastname(surname)
-                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient : No patient exists with the surname " + surname + ". Please repeat your request"));
+    public Patient findPatientById(int id) {
+        return patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient : No patient exists with the Id " + id + ". Please repeat your request"));
     }
 
     public List<Patient> findAll() {

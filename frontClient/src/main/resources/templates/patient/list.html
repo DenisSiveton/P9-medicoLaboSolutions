@@ -1,26 +1,54 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Mcommerce</title>
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
-</head>
+    <head>
+        <title>Patient Homepage Consultation</title>
+        <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    </head>
 
-<body>
-<div class="container">
-    <h1>Application MedicoLabo Solutions</h1>
+    <body>
+        <div class="container">
+            <h1>Application MedicoLabo Solutions</h1>
 
-    <div class="row">
-        <div th:each="patient : ${patients}" class="col-md-4 my-1">
-            <a th:href="@{|/patients/${patient.lastname}|}" >
-                <p th:text= "${patient.firstname}"></p>
-                <p th:text= "${patient.lastname}"></p>
-                <p th:text= "${patient.phoneNumber}"></p>
-            </a>
+            <!--<div class="row">
+                <div th:each="patient : ${patients}" class="col-md-4 my-1">
+                    <a th:href="@{|/patients/${patient.lastname}|}" >
+                        <p th:text= "${patient.firstname}"></p>
+                        <p th:text= "${patient.lastname}"></p>
+                        <p th:text= "${patient.phoneNumber}"></p>
+                    </a>
+                </div>
+
+            </div>-->
+
         </div>
-
-    </div>
-
-</div>
-<script type="text/javascript" src="webjars/bootstrap/5.3.3/js/bootstrap.min.js"></script>
-</body>
+        <div class="row mx-3">
+            <a href="/patients/add" class="btn btn-primary btn-sm">Add New Patient</a>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>FirstName</th>
+                        <th>LastName</th>
+                        <th>Gender</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                <!-- TODO: Show all Bids to the table, the Action column will have Edit & Delete buttons -->
+                    <tr th:each="patient : ${patients}">
+                        <td style="width: 10%" th:text="${patient.patientId}"></td>
+                        <td th:text="${patient.firstname}"></td>
+                        <td th:text="${patient.lastname}"></td>
+                        <td style="width: 25%" th:text="${patient.gender}"></td>
+                        <td style="width: 15%" class="text-center">
+                            <a th:href="@{/patients/{id}(id=${patient.patientId})}">Consult</a>&nbsp;|&nbsp;
+                            <a th:href="@{/patients/update/{id}(id=${patient.patientId})}">Edit</a>&nbsp;|&nbsp;
+                            <a th:href="@{/patients/delete/{id}(id=${patient.patientId})}">Delete</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <script type="text/javascript" src="webjars/bootstrap/5.3.3/js/bootstrap.min.js"></script>
+    </body>
 </html>
