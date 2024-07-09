@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/patients")
@@ -22,16 +23,16 @@ public class PatientController {
     @Autowired
     private PatientService patientService;
 
-    @GetMapping("/{lastname}")
-    public ResponseEntity<Patient> getPatient(@PathVariable("lastname")  String lastname){
-        logger.info("Retrieve patient info with the surname : {}", lastname);
-        Patient patientFound = patientService.findPatientByLastname(lastname);
+    @GetMapping("/{id}")
+    public ResponseEntity<Patient> getPatient(@PathVariable("id")  int id){
+        logger.info("Retrieve patient info with the Id : {}", id);
+        Patient patientFound = patientService.findPatientById(id);
         return ResponseEntity.ok(patientFound);
     }
     @GetMapping("")
-    public ResponseEntity<Iterable<Patient>> getAllPatients(){
+    public ResponseEntity<List<Patient>> getAllPatients(){
         logger.info("Retrieve all patients info.");
-        Iterable<Patient> listOfPatient = patientService.findAll();
+        List<Patient> listOfPatient = patientService.findAll();
         return ResponseEntity.ok(listOfPatient);
     }
 
@@ -63,6 +64,13 @@ public class PatientController {
             return ResponseEntity.created(location).body(patientAdded);
         }
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(path ="/dto/{id}")
+    public ResponseEntity<PatientDTO> getPatientDTO(@PathVariable("id") int id){
+        logger.info("Request : Get patientDTO info with the id : {}", id);
+        PatientDTO patientDTOFound = patientService.producePatientDTOFromPatient(id);
+        return ResponseEntity.ok(patientDTOFound);
     }
 
     @PutMapping(path = "/{id}")
