@@ -11,8 +11,12 @@ public class SpringCloudGatewayConfig {
     @Bean
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder){
         return builder.routes()
-                .route("backPatient-service", r -> r.path("/patients/**")
+                .route("microservice-patient", r -> r.path("/patients/**")
                         .uri("http://localhost:9001/"))
+                .route("microservice-note", r -> r.path("/notes/**")
+                        .uri("http://localhost:9002/"))
+                .route("microservice-diagnostics", r -> r.path("/diagnostics/**")
+                        .uri("http://localhost:9003/"))
                 .build();
     }
 }
