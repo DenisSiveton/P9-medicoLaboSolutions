@@ -1,7 +1,9 @@
 package com.medicoLaboSolutions.frontClient.controller;
 
+import com.medicoLaboSolutions.frontClient.beans.NoteBean;
 import com.medicoLaboSolutions.frontClient.beans.PatientBean;
 import com.medicoLaboSolutions.frontClient.beans.PatientDTOBean;
+import com.medicoLaboSolutions.frontClient.proxies.MicroserviceNoteProxy;
 import com.medicoLaboSolutions.frontClient.proxies.MicroservicePatientProxy;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,8 +19,11 @@ import java.util.List;
 public class ClientController {
     private final MicroservicePatientProxy microservicePatientProxy;
 
-    public ClientController(MicroservicePatientProxy microservicePatientProxy) {
+    private final MicroserviceNoteProxy microserviceNoteProxy;
+
+    public ClientController(MicroservicePatientProxy microservicePatientProxy, MicroserviceNoteProxy microserviceNoteProxy) {
         this.microservicePatientProxy = microservicePatientProxy;
+        this.microserviceNoteProxy = microserviceNoteProxy;
     }
 
     @RequestMapping(path = "/patients")
@@ -33,6 +38,8 @@ public class ClientController {
     public String patientInfo(@PathVariable(value = "id") int patientId, Model model){
         PatientBean patientsBean =  microservicePatientProxy.getPatient(patientId).getBody();
         model.addAttribute("patient", patientsBean);
+        List<NoteBean> notesBean = microserviceNoteProxy.getListNotesAboutPatient(patientId).getBody();
+        model.addAttribute("notes", notesBean);
         return "patient/info";
     }
 
