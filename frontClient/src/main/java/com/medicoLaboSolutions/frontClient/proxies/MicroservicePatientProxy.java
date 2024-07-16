@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(name ="backPatient", url ="localhost:9001")
+@FeignClient(name ="spring-cloud-gateway", url ="localhost:9000")
 public interface MicroservicePatientProxy {
 
     @GetMapping(value = "/patients", produces = "application/json")
