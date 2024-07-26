@@ -1,7 +1,6 @@
 package com.medicoLaboSolutions.frontClient.proxies;
 
 import com.medicoLaboSolutions.frontClient.beans.NoteBean;
-import com.medicoLaboSolutions.frontClient.beans.PatientBean;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,13 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@FeignClient(name ="spring-cloud-gateway", url ="localhost:9000")
-@RequestMapping(path = "/notes")
+@FeignClient(contextId = "ms-note",name ="spring-cloud-gateway", url = "localhost:9000")
 public interface MicroserviceNoteProxy {
 
-    @GetMapping( value = "/{id}")
+    @GetMapping( value = "/notes/{id}")
     ResponseEntity<List<NoteBean>> getListNotesAboutPatient(@PathVariable("id") int id);
 
-    @PostMapping(value = "")
+    @PostMapping(value = "/notes")
     void addNote(@RequestBody NoteBean noteBean);
 }
