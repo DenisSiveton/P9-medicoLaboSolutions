@@ -12,4 +12,13 @@ public class Note {
     private String patId;
     private String patient;
     private String note;
+
+    public Note(String patId, String patient, String note) {
+        this.patId = patId;
+        this.patient = patient;
+        this.note = note;
+    }
+
+    public Note() {
+    }
 }
