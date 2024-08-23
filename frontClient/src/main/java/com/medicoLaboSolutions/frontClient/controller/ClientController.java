@@ -26,6 +26,14 @@ public class ClientController {
         this.microserviceNoteProxy = microserviceNoteProxy;
     }
 
+
+    /*
+
+    *****************************
+    ***   Method of Patient   ***
+    *****************************
+
+     */
     @RequestMapping(path = "/patients")
     //@ResponseBody
     public String patientList(Model model){
@@ -82,5 +90,29 @@ public class ClientController {
         patientDTOBean.setPatientId(patientId);
         microservicePatientProxy.updatePatient(patientId, patientDTOBean);
         return "redirect:/patients";
+    }
+
+    /*
+
+     *****************************
+     ***   Method of Note   ***
+     *****************************
+
+     */
+
+    @RequestMapping(path = "/notes/add")
+    public String addPatientShowForm(NoteBean noteBean, Model model){
+        model.addAttribute("noteBean", noteBean);
+        return "note/add";
+    }
+
+    @RequestMapping(path = "/notes/validate")
+    public String addPatient(@Valid NoteBean noteBean){
+        try {
+            microserviceNoteProxy.addNote(noteBean);
+            return "redirect:/patients";
+        }catch (RuntimeException runtimeException){
+            return "note/add";
+        }
     }
 }
