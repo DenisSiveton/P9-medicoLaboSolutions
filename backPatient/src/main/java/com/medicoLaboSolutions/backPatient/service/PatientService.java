@@ -4,7 +4,6 @@ import com.medicoLaboSolutions.backPatient.error_handling.exceptions.PatientNotF
 import com.medicoLaboSolutions.backPatient.model.pojo.Patient;
 import com.medicoLaboSolutions.backPatient.model.dto.PatientDTO;
 import com.medicoLaboSolutions.backPatient.repository.PatientRepository;
-import com.medicoLaboSolutions.backPatient.mapper.PatientMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +15,6 @@ public class PatientService {
 
     @Autowired
     private PatientRepository patientRepository;
-
-    @Autowired
-    private PatientMapper patientMapper;
-
 
     public Patient findPatientById(int id) {
         return patientRepository.findById(id)
