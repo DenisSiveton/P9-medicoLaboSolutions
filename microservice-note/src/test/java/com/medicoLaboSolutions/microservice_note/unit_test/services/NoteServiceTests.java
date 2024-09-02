@@ -77,8 +77,4 @@ public class NoteServiceTests {
         assertThat(result.getNote()).isEqualTo("contentTest");
         verify(noteRepository, times(1)).insert(any(Note.class));
     }
-
-    public Note addNewNote(Note note) {
-        return noteRepository.insert(note);
-    }
 }

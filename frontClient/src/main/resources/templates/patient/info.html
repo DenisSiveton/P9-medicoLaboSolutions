@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Patient Homepage Consultation</title>
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../webjars/bootstrap/5.3.3/css/bootstrap.min.css"/>
 </head>
 
 <body>
@@ -31,7 +31,7 @@
     <div class="container">
         <h2>Patient's notes history</h2>
     </div>
-    <a href="/notes/add" class="btn btn-primary btn-sm">Add New Note</a>
+    <a th:href="@{/notes/add(patId=${patient.patientId}, patient=${patient.lastname})}" class="btn btn-primary btn-sm">Add New Note</a>
     <table class="table table-bordered">
         <thead>
         <tr>
