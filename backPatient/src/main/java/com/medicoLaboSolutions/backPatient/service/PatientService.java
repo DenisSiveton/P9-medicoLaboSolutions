@@ -18,7 +18,7 @@ public class PatientService {
 
     public Patient findPatientById(int id) {
         return patientRepository.findById(id)
-                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient : No patient exists with the Id " + id + ". Please repeat your request"));
+                .orElseThrow(() -> new PatientNotFoundException("Invalid Patient Id: No patient exists with the Id " + id + ". Please repeat your request"));
     }
 
     public List<Patient> findAll() {
@@ -53,7 +53,7 @@ public class PatientService {
     }
 
     public PatientDTO producePatientDTOFromPatient(int id) {
-        Patient patientFound = findPatientById(id);
+        Patient patientFound = this.findPatientById(id);
         return new PatientDTO(patientFound.getPatientId(), patientFound.getFirstname(), patientFound.getLastname(), patientFound.getAddress(), patientFound.getPhoneNumber());
     }
 }
