@@ -47,23 +47,6 @@ public class NoteServiceTests {
     }
 
     @Test
-    public void givenEmptyListNote_whenFindPatientListOfNotes_thenReturnCorrectException (){
-        //ARRANGE
-        String patientId = "4";
-        List<Note> mockResult = new ArrayList<>();
-
-        String expectedMessage = "Invalid Note : No note exists with the Id 4. Please repeat your request with another id";
-
-        when(noteRepository.findByPatId(any(String.class))).thenReturn(mockResult);
-
-        //ACT
-        Exception exception = assertThrows(NoteNotFoundException.class, () -> {noteService.findPatientListOfNotes(patientId);});
-
-        //ASSERT
-        assertThat(exception.getMessage()).isEqualTo(expectedMessage);
-    }
-
-    @Test
     public void givenNoteService_whenAddNewNote_thenCorrectMethodMustBeCalled (){
         //ARRANGE
         Note noteTest = new Note("4", "TestEarlyOnset","contentTest");

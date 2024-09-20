@@ -15,13 +15,7 @@ public class NoteService {
     private NoteRepository noteRepository;
 
     public List<Note> findPatientListOfNotes (String patientId){
-        List<Note> listOfNotes = noteRepository.findByPatId(patientId);
-        if(listOfNotes.size() == 0){
-            throw new NoteNotFoundException("Invalid Note : No note exists with the Id " + patientId + ". Please repeat your request with another id");
-        }
-        else{
-            return listOfNotes;
-        }
+        return noteRepository.findByPatId(patientId);
     }
 
     public Note addNewNote(Note note) {
