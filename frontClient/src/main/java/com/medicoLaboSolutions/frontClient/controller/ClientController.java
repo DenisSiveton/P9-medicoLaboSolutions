@@ -1,8 +1,10 @@
 package com.medicoLaboSolutions.frontClient.controller;
 
+import com.medicoLaboSolutions.frontClient.beans.DiagnosticAnalysisBean;
 import com.medicoLaboSolutions.frontClient.beans.NoteBean;
 import com.medicoLaboSolutions.frontClient.beans.PatientBean;
 import com.medicoLaboSolutions.frontClient.beans.PatientDTOBean;
+import com.medicoLaboSolutions.frontClient.proxies.MicroserviceDiagnosticProxy;
 import com.medicoLaboSolutions.frontClient.proxies.MicroserviceNoteProxy;
 import com.medicoLaboSolutions.frontClient.proxies.MicroservicePatientProxy;
 import jakarta.validation.Valid;
@@ -21,11 +23,13 @@ public class ClientController {
 
     private final MicroserviceNoteProxy microserviceNoteProxy;
 
-    public ClientController(MicroservicePatientProxy microservicePatientProxy, MicroserviceNoteProxy microserviceNoteProxy) {
+    private final MicroserviceDiagnosticProxy microserviceDiagnosticProxy;
+
+    public ClientController(MicroservicePatientProxy microservicePatientProxy, MicroserviceNoteProxy microserviceNoteProxy, MicroserviceDiagnosticProxy microserviceDiagnosticProxy) {
         this.microservicePatientProxy = microservicePatientProxy;
         this.microserviceNoteProxy = microserviceNoteProxy;
+        this.microserviceDiagnosticProxy = microserviceDiagnosticProxy;
     }
-
 
     /*
 
@@ -48,6 +52,8 @@ public class ClientController {
         model.addAttribute("patient", patientsBean);
         List<NoteBean> notesBean = microserviceNoteProxy.getListNotesAboutPatient(patientId).getBody();
         model.addAttribute("notes", notesBean);
+        DiagnosticAnalysisBean diagnosticAnalysisBean = microserviceDiagnosticProxy.getDiagnostic(patientId).getBody();
+        model.addAttribute("diagnostic", diagnosticAnalysisBean);
         return "patient/info";
     }
 
@@ -95,7 +101,7 @@ public class ClientController {
     /*
 
      *****************************
-     ***   Method of Note   ***
+     ***     Method of Note    ***
      *****************************
 
      */

@@ -9,42 +9,86 @@
 <div class="container">
     <h1>Application MedicoLabo Solutions</h1>
 </div>
-<div class="row">
+<div class="row mx-1">
     <div class="container">
         <h2 th:text ="${'Patient information : ' + patient.lastname + ' ' + patient.firstname}"></h2>
     </div>
-    <div class="col-md-4 my-1">
-        <p style="display:inline">Address:</p>
-        <p style="display:inline" th:text= "${patient.address}"></p>
-    </div>
-    <div  class="col-md-4 my-1">
-        <p style="display:inline">Phone Number:</p>
-        <p style="display:inline" th:text= "${patient.phoneNumber}"></p>
-    </div>
-    <div  class="col-md-4 my-1 inline">
-        <p style="display:inline">Date of Birth:</p>
-        <p style="display:inline" th:text= "${patient.birthDate}"></p>
+    <div class="mx-3">
+        <div class="col-md-4 my-1">
+            <p style="display:inline">Address:</p>
+            <p style="display:inline" th:text= "${patient.address}"></p>
+        </div>
+        <div  class="col-md-4 my-1">
+            <p style="display:inline">Phone Number:</p>
+            <p style="display:inline" th:text= "${patient.phoneNumber}"></p>
+        </div>
+        <div  class="col-md-4 my-1">
+            <p style="display:inline">Date of Birth:</p>
+            <p style="display:inline" th:text= "${patient.birthDate}"></p>
+        </div>
     </div>
 </div>
 
-<div class="row mx-3">
+<div class="row mx-1">
     <div class="container">
         <h2>Patient's notes history</h2>
     </div>
-    <a th:href="@{/notes/add(patId=${patient.patientId}, patient=${patient.lastname})}" class="btn btn-primary btn-sm">Add New Note</a>
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Content</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- TODO: Show all Bids to the table, the Action column will have Edit & Delete buttons -->
-        <tr th:each="note : ${notes}">
-            <td style="width: 10%" th:text="${note.note}"></td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="mx-3">
+        <a th:href="@{/notes/add(patId=${patient.patientId}, patient=${patient.lastname})}" class="btn btn-primary btn-sm my-2">Add New Note</a>
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Content</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="note : ${notes}">
+                <td style="width: 10%" th:text="${note.note}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="row mx-1">
+    <div class="container">
+        <h2>Patient's Diagnostic Report</h2>
+    </div>
+    <div class="row mx-3">
+        <div>
+            <div  class="col-md-4 my-1">
+                <p style="display:inline">Patient's Age:</p>
+                <p style="display:inline" th:text= "${diagnostic.patientAge}"></p>
+            </div>
+            <div  class="col-md-4 my-1">
+                <p style="display:inline">Level of sickness:</p>
+                <p style="display:inline" th:text= "${diagnostic.sicknessLevel}"></p>
+            </div>
+            <div  class="col-md-4 my-1">
+                <p style="display:inline">Category of sickness:</p>
+                <p style="display:inline" th:text= "${diagnostic.sicknessCategory}"></p>
+            </div>
+            <div  class="col-md-4 my-1">
+                <p style="display:inline">Number of Symptoms:</p>
+                <p style="display:inline" th:text= "${diagnostic.numberOfSymptoms}"></p>
+            </div>
+        </div>
+        <div class="row col-md-2">
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Symptoms listed</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="symptom : ${diagnostic.listOfSymptoms}">
+                    <td style="width: 10%" th:text="${symptom}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 <div  class="col-md-4 my-1">
     <a th:href="@{|/patients|}" >
