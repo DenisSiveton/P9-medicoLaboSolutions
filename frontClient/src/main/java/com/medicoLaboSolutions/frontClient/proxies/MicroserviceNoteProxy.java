@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@FeignClient(contextId = "ms-note",name ="spring-cloud-gateway", url = "localhost:9000")
+@FeignClient(contextId = "ms-note",name ="spring-cloud-gateway", url = "spring-cloud-gateway:9000")
 public interface MicroserviceNoteProxy {
 
     @GetMapping( value = "/notes/{id}")

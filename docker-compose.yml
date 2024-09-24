@@ -1,0 +1,171 @@
+version: '3.8'
+
+services:
+  config-server:
+    image: config-server-image
+    restart: always
+    ports:
+      - "9101:9101"
+    networks:
+      - backend
+    healthcheck:
+      test: "exit 0" #"curl --fail --silent  http://localhost:9101/actuator/health | grep 'UP' || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  eureka-server:
+    image: eureka-server-image
+    hostname: eureka-server
+    deploy:
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      config-server:
+        condition: service_completed_successfully
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "9102:9102"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+    healthcheck:
+      test: "exit 0"
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  mysqldb:
+    image: "mysql:8.0"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: medicolabosolutions
+      MYSQL_USER: root
+      MYSQL_PASSWORD: mspatientPSSWRD
+      MYSQL_ROOT_PASSWORD: mspatientPSSWRD
+    networks:
+      - backend
+      
+  backPatient:
+    image: ms-patient-image
+    ports:
+      - "9001:9001"
+    depends_on:
+      - config-server
+      - eureka-server
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - MYSQL_HOST=mysqldb
+      - DOCKER_MYSQL_HOSTNAME=mysqldb
+      - DOCKER_MYSQL_PORT=3306
+      - DOCKER_MYSQL_USER=root
+      - DOCKER_MYSQL_PASSWORD=mspatientPSSWRD
+    links:
+      - eureka-server
+      - mysqldb
+    restart: always
+    networks:
+      - backend
+        
+  mongodb:
+    image: "mongo:latest"
+    volumes:
+      - dbdata6:/data/db
+    restart: always
+    ports:
+      - "27020:27017"
+    networks:
+      - backend
+
+  microservice-note:
+    image: ms-note-image
+    ports:
+      - "9002:9002"
+    depends_on:
+      - config-server
+      - eureka-server
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - DOCKER_MONGODB_HOSTNAME=mongodb
+      - DOCKER_MONGODB_PORT=27017
+    links:
+      - eureka-server
+      - mongodb
+    restart: always
+    networks:
+      - backend
+
+  microservice-diagnostic:
+     image: ms-diagnostic-image
+     ports:
+       - "9003:9003"
+     depends_on:
+       - config-server
+       - eureka-server
+     environment:
+       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+       - DOCKER_EUREKA_HOSTNAME=eureka-server
+     restart: always
+     links:
+       - eureka-server
+     networks:
+       - backend
+     
+
+  spring-cloud-gateway:
+     image: spring-cloud-gateway-image
+     depends_on:
+       - config-server
+       - eureka-server
+       - backPatient
+       - microservice-note
+       - microservice-diagnostic
+     restart: always
+     networks:
+       - backend
+     ports:
+       - "9000:9000"
+     environment:
+       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+       - DOCKER_EUREKA_HOSTNAME=eureka-server
+     links:
+       - eureka-server
+
+  frontClient:
+    image: ms-ui-image
+    depends_on:
+      - spring-cloud-gateway
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - DOCKER_SPRING_CLOUD_HOSTNAME=spring-cloud-gateway
+    links:
+      - eureka-server
+
+networks:
+  backend:
+
+volumes:
+  db_data: {}
+  dbdata6: {}
+
+  ## to work on
+  #healthcheck:
+  #  test: "curl --fail --silent  http://localhost:9101/actuator/health | grep 'UP' || exit 1"
+  #  interval: 10s
+  #  timeout: 10s
+  #  start_period: 10s
+  #  retries: 5
