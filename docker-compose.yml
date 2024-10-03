@@ -139,6 +139,10 @@ services:
        - DOCKER_EUREKA_HOSTNAME=eureka-server
        - MS_PATIENT_NAME=backPatient
        - MS_PATIENT_PORT=9001
+       - MS_NOTE_NAME=microservice-note
+       - MS_NOTE_PORT=9002
+       - MS_DIAGNOSTIC_NAME=microservice-diagnostic
+       - MS_DIAGNOSTIC_PORT=9003
      links:
        - eureka-server
 
