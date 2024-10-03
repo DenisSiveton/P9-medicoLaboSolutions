@@ -46,11 +46,9 @@ public class Patient {
     private String gender;
 
     @Column(name = "address")
-    @NotEmpty(message = "The field is mandatory")
     private String address;
 
     @Column(name = "phone_number")
-    @NotEmpty(message = "The field is mandatory")
     @Pattern(regexp = "^\\(?([0-9]{3})\\)?[-]([0-9]{3})[-]([0-9]{4})$",
             message = "The phone number format is the following : XXX-XXX-XXX.\nFor instance a valid phone number is : 012-345-6789.")
     private String phoneNumber;
