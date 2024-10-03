@@ -20,7 +20,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{firstname}" id="firstname" placeholder="TEST" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></p>
+                <p class="text-danger" th:if="${firstnameError}" th:text="${firstnameError}"></p>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{lastname}" id="lastname" placeholder="TEST" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></p>
+                <p class="text-danger" th:if="${lastnameError}" th:text="${lastnameError}"></p>
               </div>
             </div>
           </div>
@@ -40,7 +40,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{address}" id="address" placeholder="TEST" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+                <p class="text-danger" th:if="${addressError}" th:text="${addressError}"></p>
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="TEST" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+                <p class="text-danger" th:if="${phoneNumberError}" th:text="${phoneNumberError}"></p>
               </div>
             </div>
           </div>

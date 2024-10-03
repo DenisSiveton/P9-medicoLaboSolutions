@@ -21,10 +21,10 @@ public interface MicroservicePatientProxy {
     ResponseEntity<PatientDTOBean> getPatientDTO(@PathVariable("id") int id);
 
     @PostMapping(value = "/patients")
-    void addPatient(@RequestBody PatientBean patientBean);
+    ResponseEntity<?> addPatient(@RequestBody PatientBean patientBean);
 
     @PutMapping(value ="/patients/{id}")
-    void updatePatient(@PathVariable("id") int id, @RequestBody PatientDTOBean patientDTOBean);
+    ResponseEntity<?> updatePatient(@PathVariable("id") int id, @RequestBody PatientDTOBean patientDTOBean);
     @DeleteMapping( value = "/patients/{id}")
     ResponseEntity<PatientBean> deletePatient(@PathVariable("id") int id);
 }

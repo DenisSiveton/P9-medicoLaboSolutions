@@ -20,7 +20,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{firstname}" id="firstname" placeholder="Enter your Firstname" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}"></p>
+                <p class="text-danger" th:if="${firstnameError}" th:text="${firstnameError}"></p>
               </div>
             </div>
           </div>
@@ -30,7 +30,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{lastname}" id="lastname" placeholder="Enter your Last Name" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}"></p>
+                <p class="text-danger" th:if="${lastnameError}" th:text="${lastnameError}"></p>
               </div>
             </div>
           </div>
@@ -38,9 +38,9 @@
           <div class="form-group col-md-6">
             <label for="birthDate" class="col-sm-2 control-label">Date of Birth</label>
             <div class="col-sm-10">
-              <input type="text" th:field="*{birthDate}" id="birthDate" placeholder="Use format : YYYY-MM-dd" class="col-4">
+              <input type="date" th:field="*{birthDate}" id="birthDate" placeholder="Use format : YYYY-MM-dd" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></p>
+                <p class="text-danger" th:if="${birthDateError}" th:text="${birthDateError}"></p>
               </div>
             </div>
           </div>
@@ -51,7 +51,7 @@
               <input  type="radio" th:field="*{gender}" name="gender" value="M" checked class="col-4">Male
               <input  type="radio" th:field="*{gender}" name="gender" value="F" class="col-4">Female
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"></p>
+                <p class="text-danger" th:if="${genderError}" th:text="${genderError}"></p>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{address}" id="address" placeholder="Enter your Home Address" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
+                <p class="text-danger" th:if="${addressError}" th:text="${addressError}"></p>
               </div>
             </div>
           </div>
@@ -71,7 +71,7 @@
             <div class="col-sm-10">
               <input type="text" th:field="*{phoneNumber}" id="phoneNumber" placeholder="XXX-XXX-XXXX" class="col-4">
               <div style="color: red;">
-                <p class="text-danger" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}"></p>
+                <p class="text-danger" th:if="${phoneNumberError}" th:text="${phoneNumberError}"></p>
               </div>
             </div>
           </div>
