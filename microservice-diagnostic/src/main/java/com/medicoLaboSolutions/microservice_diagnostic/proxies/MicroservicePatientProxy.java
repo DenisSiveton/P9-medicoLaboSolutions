@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(contextId = "ms-patient",name ="spring-cloud-gateway", url = "spring-cloud-gateway:9000")
+@FeignClient(contextId = "ms-patient",name ="spring-cloud-gateway", url = "${proxy.gateway.name}" + ":" + "${proxy.gateway.port}")
 public interface MicroservicePatientProxy {
 
     @GetMapping( value = "/patients/{id}")
