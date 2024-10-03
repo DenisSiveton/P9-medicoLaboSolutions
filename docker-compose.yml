@@ -31,6 +31,7 @@ services:
       - "9102:9102"
     environment:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
     healthcheck:
       test: "exit 0"
       interval: 10s
@@ -41,14 +42,13 @@ services:
     image: "mysql:8.0"
     volumes:
       - db_data:/var/lib/mysql
+      - ./frontClient/src/main/resources/data.sql:/docker-entrypoint-initdb.d/datadump.sql
     restart: always
     ports:
       - "3307:3306"
     environment:
       MYSQL_DATABASE: medicolabosolutions
-      MYSQL_USER: root
-      MYSQL_PASSWORD: mspatientPSSWRD
-      MYSQL_ROOT_PASSWORD: mspatientPSSWRD
+      MYSQL_ROOT_PASSWORD: msmysqlPSSWRD
     networks:
       - backend
       
@@ -66,7 +66,7 @@ services:
       - DOCKER_MYSQL_HOSTNAME=mysqldb
       - DOCKER_MYSQL_PORT=3306
       - DOCKER_MYSQL_USER=root
-      - DOCKER_MYSQL_PASSWORD=mspatientPSSWRD
+      - DOCKER_MYSQL_PASSWORD=msmysqlPSSWRD
     links:
       - eureka-server
       - mysqldb
@@ -113,12 +113,13 @@ services:
      environment:
        - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
        - DOCKER_EUREKA_HOSTNAME=eureka-server
+       - DOCKER_SPRING_CLOUD_HOSTNAME=spring-cloud-gateway
+       - DOCKER_SPRING_CLOUD_PORT=9000
      restart: always
      links:
        - eureka-server
      networks:
        - backend
-     
 
   spring-cloud-gateway:
      image: spring-cloud-gateway-image
@@ -136,6 +137,8 @@ services:
      environment:
        - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
        - DOCKER_EUREKA_HOSTNAME=eureka-server
+       - MS_PATIENT_NAME=backPatient
+       - MS_PATIENT_PORT=9001
      links:
        - eureka-server
 
@@ -152,8 +155,15 @@ services:
       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
       - DOCKER_EUREKA_HOSTNAME=eureka-server
       - DOCKER_SPRING_CLOUD_HOSTNAME=spring-cloud-gateway
+      - DOCKER_SPRING_CLOUD_PORT=9000
+      - MYSQL_HOST=mysqldb
+      - DOCKER_MYSQL_HOSTNAME=mysqldb
+      - DOCKER_MYSQL_PORT=3306
+      - DOCKER_MYSQL_USER=root
+      - DOCKER_MYSQL_PASSWORD=msmysqlPSSWRD
     links:
       - eureka-server
+      - mysqldb
 
 networks:
   backend:

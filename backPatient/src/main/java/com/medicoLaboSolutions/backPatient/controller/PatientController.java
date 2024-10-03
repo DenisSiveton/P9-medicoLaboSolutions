@@ -7,8 +7,10 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -49,7 +51,7 @@ public class PatientController {
      * @return In case of error : URI bidList/add. Returns to the form for a second attempt
      */
     @PostMapping(path = "")
-    public ResponseEntity<Patient> addPatient(@Valid @RequestBody Patient patient, BindingResult result) {
+    public ResponseEntity<?> addPatient(@Valid @RequestBody Patient patient, BindingResult result) {
         logger.info("Request : Add a new Patient");
         if (!result.hasErrors()) {
             Patient patientAdded = patientService.addNewPatient(patient);
@@ -63,7 +65,9 @@ public class PatientController {
 
             return ResponseEntity.created(location).body(patientAdded);
         }
-        return ResponseEntity.badRequest().build();
+        List<FieldError> fieldErrorList = result.getFieldErrors();
+        logger.info("Error: The given information are not correct");
+        return new ResponseEntity(fieldErrorList, HttpStatus.OK);
     }
 
     @GetMapping(path ="/dto/{id}")
@@ -74,7 +78,7 @@ public class PatientController {
     }
 
     @PutMapping(path = "/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
+    public ResponseEntity<?> updatePatient(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientWithUpdatedInfo, BindingResult result){
         logger.info("Request : Update patient with the id : {}",id);
         if(!result.hasErrors()){
             Patient patientUpdated =  patientService.updatePatient(patientWithUpdatedInfo, id);
@@ -88,7 +92,9 @@ public class PatientController {
 
             return ResponseEntity.created(location).body(patientUpdated);
         }
-        return ResponseEntity.badRequest().build();
+        List<FieldError> fieldErrorList = result.getFieldErrors();
+        logger.info("Error: The given information are not correct");
+        return new ResponseEntity(fieldErrorList, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

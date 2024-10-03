@@ -25,13 +25,13 @@ public class Patient {
     private int patientId;
 
     @Column(name = "firstname")
-    @NotNull
-    @Pattern(regexp ="^[a-zA-Z]+$")
+    @NotEmpty(message = "This field is mandatory")
+    @Pattern(regexp ="^[a-zA-Z]+$", message = "Firstname must be alphabetical (contains only the following letters : a-z and A-Z")
     private String firstname;
 
     @Column(name = "lastname")
-    @NotNull
-    @Pattern(regexp ="^[a-zA-Z]+$")
+    @NotEmpty(message = "The field is mandatory")
+    @Pattern(regexp ="^[a-zA-Z]+$", message = "Lastname must be alphabetical (contains only the following letters : a-z and A-Z)")
     private String lastname;
 
     @Column(name = "birth_date")
@@ -40,15 +40,19 @@ public class Patient {
     private Date birthDate;
 
     @Column(name = "gender")
-    @Pattern(regexp ="^[F|M]{1}$")
-    @Size(min = 1, max = 1)
+    @NotEmpty(message = "The field is mandatory")
+    @Pattern(regexp ="^[F|M]{1}$", message = "The gender is either 'F' (for female) or 'M'(for male)")
+    @Size(min = 1, max = 1, message = "Enter either 'F' or 'M' for your gender")
     private String gender;
 
     @Column(name = "address")
+    @NotEmpty(message = "The field is mandatory")
     private String address;
 
     @Column(name = "phone_number")
-    @Pattern(regexp = "^\\(?([0-9]{3})\\)?[-]([0-9]{3})[-]([0-9]{4})$")
+    @NotEmpty(message = "The field is mandatory")
+    @Pattern(regexp = "^\\(?([0-9]{3})\\)?[-]([0-9]{3})[-]([0-9]{4})$",
+            message = "The phone number format is the following : XXX-XXX-XXX.\nFor instance a valid phone number is : 012-345-6789.")
     private String phoneNumber;
 
     public Patient(String firstname, String lastname, Date birthDate, String gender) {

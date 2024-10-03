@@ -1,8 +1,9 @@
-package com.medicoLaboSolutions.backPatient.config.security;
+package com.medicoLaboSolutions.frontClient.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,7 +28,7 @@ import javax.sql.DataSource;
  */
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig {
+public class SpringSecurityConfiguration {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -55,18 +56,18 @@ public class SpringSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         //Set up the login form
-        httpSecurity.formLogin().defaultSuccessUrl("/patients").permitAll();
+        httpSecurity.formLogin(form -> form
+                        .loginPage("/login")
+                        .defaultSuccessUrl("/patients")
+                        .permitAll());
 
         // For test use only
         httpSecurity.csrf().disable();
 
         //Set up the filter chain for different request (authentication needed or not)
-        /*httpSecurity.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) ->
-                authorizationManagerRequestMatcherRegistry
-                        .anyRequest().authenticated());*/
         httpSecurity.authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) ->
                 authorizationManagerRequestMatcherRegistry
-                        .anyRequest().permitAll());
+                        .anyRequest().authenticated());
         return httpSecurity.build();
     }
 

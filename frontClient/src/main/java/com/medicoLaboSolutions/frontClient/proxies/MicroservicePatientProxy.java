@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@FeignClient(contextId = "ms-patient",name ="spring-cloud-gateway", url = "spring-cloud-gateway:9000")
+@FeignClient(contextId = "ms-patient",name ="spring-cloud-gateway", url ="${proxy.gateway.name}" + ":" + "${proxy.gateway.port}")
 public interface MicroservicePatientProxy {
 
     @GetMapping(value = "/patients", produces = "application/json")
@@ -21,10 +21,10 @@ public interface MicroservicePatientProxy {
     ResponseEntity<PatientDTOBean> getPatientDTO(@PathVariable("id") int id);
 
     @PostMapping(value = "/patients")
-    void addPatient(@RequestBody PatientBean patientBean);
+    ResponseEntity<?> addPatient(@RequestBody PatientBean patientBean);
 
     @PutMapping(value ="/patients/{id}")
-    void updatePatient(@PathVariable("id") int id, @RequestBody PatientDTOBean patientDTOBean);
+    ResponseEntity<?> updatePatient(@PathVariable("id") int id, @RequestBody PatientDTOBean patientDTOBean);
     @DeleteMapping( value = "/patients/{id}")
     ResponseEntity<PatientBean> deletePatient(@PathVariable("id") int id);
 }
