@@ -202,12 +202,16 @@ public class PatientControllerITests {
         MvcResult mvcResult = mockMvc.perform(post(URI_PREFIX)
                         .content(new ObjectMapper().writeValueAsString(patientToAdd))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andReturn();
+
+        String errorList = mvcResult.getResponse().getContentAsString();
+        assertThat(errorList).contains("defaultMessage\":\"Firstname must be alphabetical (contains only the following letters : a-z and A-Z")
+                .contains("field\":\"firstname");
     }
 
     @Test
-    public void updatePatient_WithIncorrectPatientDTO_ShouldThrowException_ITest() throws Exception {
+    public void updatePatient_WithIncorrectPatientDTO_ShouldReturnListOfErrors_ITest() throws Exception {
         //ARRANGE
         String patientId = "4";
         String uri = URI_PREFIX + "/" + patientId;
@@ -220,11 +224,15 @@ public class PatientControllerITests {
         MvcResult mvcResult = mockMvc.perform(put(uri)
                         .content(new ObjectMapper().writeValueAsString(patientDTOWithUpdatedData))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isOk())
                 .andReturn();
+
+        String errorList = mvcResult.getResponse().getContentAsString();
+        assertThat(errorList).contains("defaultMessage\":\"Firstname must be alphabetical (contains only the following letters : a-z and A-Z")
+                .contains("field\":\"firstname");
     }
     @Test
-    public void updatePatient_WithIncorrectPatientId_ShouldThrowException_ITest() throws Exception {
+    public void updatePatient_WithIncorrectPatientId_ShouldReturnListOfErrors_ITest() throws Exception {
         //ARRANGE
         String patientId = "6";
         String uri = URI_PREFIX + "/" + patientId;
