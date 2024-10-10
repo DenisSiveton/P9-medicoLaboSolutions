@@ -1,5 +1,6 @@
 # Use an official OpenJDK runtime (version 17) as a parent image
 FROM openjdk:17-alpine3.14
+RUN apk --no-cache add bash curl
 
 #Add folder App in container
 ADD . /app/
