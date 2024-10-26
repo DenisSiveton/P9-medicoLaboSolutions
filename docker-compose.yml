@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   config-server:
-    image: config-server-image
+    image: sukandev3131/oc-p9-microservice-config:1.0.0
     restart: always
     ports:
       - "9101:9101"
@@ -17,7 +17,7 @@ services:
       retries: 20
 
   eureka-server:
-    image: eureka-server-image
+    image: sukandev3131/oc-p9-microservice-eureka:1.0.0
     hostname: eureka-server
     deploy:
       mode: replicated
@@ -56,7 +56,7 @@ services:
       - backend
       
   backPatient:
-    image: ms-patient-image
+    image: sukandev3131/microservice-patient:1.0.0
     ports:
       - "9001:9001"
     depends_on:
@@ -90,7 +90,7 @@ services:
       - backend
 
   microservice-note:
-    image: ms-note-image
+    image: sukandev3131/microservice-note:1.0.0
     ports:
       - "9002:9002"
     depends_on:
@@ -111,7 +111,7 @@ services:
       - backend
 
   microservice-diagnostic:
-     image: ms-diagnostic-image
+     image: sukandev3131/microservice-diagnostic:1.0.0
      ports:
        - "9003:9003"
      depends_on:
@@ -131,7 +131,7 @@ services:
        - backend
 
   spring-cloud-gateway:
-     image: spring-cloud-gateway-image
+     image: sukandev3131/oc-p9-microservice-gateway:1.0.0
      depends_on:
        config-server:
          condition: service_healthy
@@ -155,7 +155,7 @@ services:
        - eureka-server
 
   frontClient:
-    image: ms-ui-image
+    image: sukandev3131/oc-p9-microservice-front:1.0.0
     depends_on:
       config-server:
         condition: service_healthy
@@ -186,11 +186,3 @@ networks:
 volumes:
   db_data: {}
   dbdata6: {}
-
-  ## to work on
-  #healthcheck:
-  #  test: "curl --fail --silent  http://localhost:9101/actuator/health | grep 'UP' || exit 1"
-  #  interval: 10s
-  #  timeout: 10s
-  #  start_period: 10s
-  #  retries: 5
