@@ -1,0 +1,188 @@
+version: '3.8'
+
+services:
+  config-server:
+    image: sukandev3131/oc-p9-microservice-config:1.0.0
+    restart: always
+    ports:
+      - "9101:9101"
+    environment:
+      - SERVICE_HEALTH_URL=http://config-server:9101/actuator/health
+    networks:
+      - backend
+    healthcheck:
+      test: "curl --fail --silent  $${SERVICE_HEALTH_URL} | grep 'UP' || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 20
+
+  eureka-server:
+    image: sukandev3131/oc-p9-microservice-eureka:1.0.0
+    hostname: eureka-server
+    deploy:
+      mode: replicated
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      config-server:
+        condition: service_healthy
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "9102:9102"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - SERVICE_HEALTH_URL=http://eureka-server:9102/actuator/health
+    healthcheck:
+      test: "curl --fail --silent  $${SERVICE_HEALTH_URL} | grep 'UP' || exit 1"
+      interval: 10s
+      timeout: 10s
+      retries: 20
+
+  mysqldb:
+    image: "mysql:8.0"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./frontClient/src/main/resources/data.sql:/docker-entrypoint-initdb.d/datadump.sql
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_DATABASE: medicolabosolutions
+      MYSQL_ROOT_PASSWORD: msmysqlPSSWRD
+    networks:
+      - backend
+      
+  backPatient:
+    image: sukandev3131/microservice-patient:1.0.0
+    ports:
+      - "9001:9001"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - MYSQL_HOST=mysqldb
+      - DOCKER_MYSQL_HOSTNAME=mysqldb
+      - DOCKER_MYSQL_PORT=3306
+      - DOCKER_MYSQL_USER=root
+      - DOCKER_MYSQL_PASSWORD=msmysqlPSSWRD
+    links:
+      - eureka-server
+      - mysqldb
+    restart: always
+    networks:
+      - backend
+        
+  mongodb:
+    image: "mongo:latest"
+    volumes:
+      - dbdata6:/data/db
+    restart: always
+    ports:
+      - "27020:27017"
+    networks:
+      - backend
+
+  microservice-note:
+    image: sukandev3131/microservice-note:1.0.0
+    ports:
+      - "9002:9002"
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - DOCKER_MONGODB_HOSTNAME=mongodb
+      - DOCKER_MONGODB_PORT=27017
+    links:
+      - eureka-server
+      - mongodb
+    restart: always
+    networks:
+      - backend
+
+  microservice-diagnostic:
+     image: sukandev3131/microservice-diagnostic:1.0.0
+     ports:
+       - "9003:9003"
+     depends_on:
+       config-server:
+         condition: service_healthy
+       eureka-server:
+         condition: service_healthy
+     environment:
+       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+       - DOCKER_EUREKA_HOSTNAME=eureka-server
+       - DOCKER_SPRING_CLOUD_HOSTNAME=spring-cloud-gateway
+       - DOCKER_SPRING_CLOUD_PORT=9000
+     restart: always
+     links:
+       - eureka-server
+     networks:
+       - backend
+
+  spring-cloud-gateway:
+     image: sukandev3131/oc-p9-microservice-gateway:1.0.0
+     depends_on:
+       config-server:
+         condition: service_healthy
+       eureka-server:
+         condition: service_healthy
+     restart: always
+     networks:
+       - backend
+     ports:
+       - "9000:9000"
+     environment:
+       - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+       - DOCKER_EUREKA_HOSTNAME=eureka-server
+       - MS_PATIENT_NAME=backPatient
+       - MS_PATIENT_PORT=9001
+       - MS_NOTE_NAME=microservice-note
+       - MS_NOTE_PORT=9002
+       - MS_DIAGNOSTIC_NAME=microservice-diagnostic
+       - MS_DIAGNOSTIC_PORT=9003
+     links:
+       - eureka-server
+
+  frontClient:
+    image: sukandev3131/oc-p9-microservice-front:1.0.0
+    depends_on:
+      config-server:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    restart: always
+    networks:
+      - backend
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_CLOUD_CONFIG_URI=http://config-server:9101
+      - DOCKER_EUREKA_HOSTNAME=eureka-server
+      - DOCKER_SPRING_CLOUD_HOSTNAME=spring-cloud-gateway
+      - DOCKER_SPRING_CLOUD_PORT=9000
+      - MYSQL_HOST=mysqldb
+      - DOCKER_MYSQL_HOSTNAME=mysqldb
+      - DOCKER_MYSQL_PORT=3306
+      - DOCKER_MYSQL_USER=root
+      - DOCKER_MYSQL_PASSWORD=msmysqlPSSWRD
+    links:
+      - eureka-server
+      - mysqldb
+
+networks:
+  backend:
+
+volumes:
+  db_data: {}
+  dbdata6: {}
