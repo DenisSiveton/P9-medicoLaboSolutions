@@ -202,7 +202,7 @@ public class ClientController {
      * @return html page with the Patient update form
      */
     @RequestMapping(path = "/notes/add")
-    public String addPatientShowForm(NoteBean noteBean, Model model){
+    public String addNoteShowForm(NoteBean noteBean, Model model){
         model.addAttribute("noteBean", noteBean);
         return "note/add";
     }
@@ -217,10 +217,10 @@ public class ClientController {
      * @return In case of error : Form is updated with error messages.
      */
     @RequestMapping(path = "/notes/validate")
-    public String addPatient(@Valid NoteBean noteBean){
+    public String addNote(@Valid NoteBean noteBean){
         try {
             microserviceNoteProxy.addNote(noteBean);
-            return "redirect:/patients";
+            return "redirect:/patients/" + noteBean.getPatId();
         }catch (RuntimeException runtimeException){
             return "note/add";
         }
