@@ -18,6 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * This class serves as a controller for the diagnostic application
+ *
+ * It is linked with the controller of two others microservices:
+ *  - microservice-patient
+ *  - microservice-note
+ *
+ * It contains a request to calculate a diagnostic of a patient and exposes the result as a json data
+ */
 @RestController
 @RequestMapping(path = "/diagnostics")
 public class DiagnosticController {
@@ -36,6 +45,16 @@ public class DiagnosticController {
         this.microserviceNoteProxy = microserviceNoteProxy;
     }
 
+    /**
+     * This method establishes a diagnostic for a specific Patient using an Id number.
+     * Below is the process:
+     *  - retrieve Patient info from Id
+     *  - retrieve all Notes associated to the Patient
+     *  - calculate the diagnostic of the Patient based on the Patient's age and Notes's content.
+     *
+     * @param patientId Id number that serves as an identifier for the database.
+     * @return ResponseEntity containing the data of the diagnostic
+     */
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<DiagnosticAnalysis> getDiagnostic(@PathVariable("id") int patientId){
         logger.info("Request : Calculate diagnostic");
